@@ -1,0 +1,15 @@
+.env
+.env.*
+*.pem
+*credentials*
+data/
+__pycache__/
+*.pyc
+.pytest_cache/
+wp-content/uploads/
+wp-content/cache/
+wp-content/upgrade/
+vendor/
+node_modules/
+.DS_Store
+Thumbs.db

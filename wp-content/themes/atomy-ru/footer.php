@@ -1,0 +1,46 @@
+
+</main>
+<footer class="site-footer">
+	<div class="container site-footer__inner">
+		<div class="site-footer__col site-footer__brand">
+			<img class="site-footer__logo" src="https://resource.atomy.ru/20260610134910/fo/images/common/CI-white.svg" alt="ATOMY" width="120" height="32" />
+			<p>Премиальное качество по абсолютной цене.</p>
+		</div>
+		<div class="site-footer__col">
+			<h4>Компания</h4>
+			<p>ООО АТОМИ РУС</p>
+			<p>г. Москва, ул. Обручева, дом 23к3, эт. 7</p>
+			<p>ОГРН: 1187746655910</p>
+			<p>ИНН: 7728435112</p>
+		</div>
+		<div class="site-footer__col">
+			<h4>Поддержка</h4>
+			<p>E-mail: atomy_ru@atomypark.com</p>
+			<p>Пн-Пт: 08:00-18:00</p>
+			<p>Сб: 09:00-18:00</p>
+		</div>
+		<div class="site-footer__col">
+			<h4>Каталог</h4>
+			<ul class="site-footer__links">
+			<?php
+			wp_list_categories(
+				array(
+					'taxonomy'   => 'product_cat',
+					'title_li'   => '',
+					'number'     => 6,
+					'hide_empty' => true,
+				)
+			);
+			?>
+			</ul>
+		</div>
+	</div>
+	<div class="site-footer__bottom">
+		<div class="container">
+			<span>&copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> ATOMY RUSSIA. Клон витрины в учебных целях.</span>
+		</div>
+	</div>
+</footer>
+<?php wp_footer(); ?>
+</body>
+</html>

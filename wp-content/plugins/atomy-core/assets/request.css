@@ -1,0 +1,626 @@
+/* ================= Request page layout ================= */
+
+.atomy-request-wrap {
+  max-width: 1160px;
+  margin: 0 auto;
+}
+
+.atomy-request-layout {
+  display: grid;
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .atomy-request-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 2.5rem;
+  }
+
+  .atomy-request-cart {
+    position: sticky;
+    top: 10rem;
+  }
+}
+
+.atomy-request-empty {
+  padding: 1rem 0 2rem;
+}
+
+/* ================= Cart summary ================= */
+
+.atomy-request-cart__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.atomy-request-cart__title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.atomy-request-cart__edit {
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.atomy-request-cart-table {
+  width: 100%;
+  margin: 0;
+  border: 1px solid #e5e9ed;
+  border-radius: 12px;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+}
+
+.atomy-request-cart-table th,
+.atomy-request-cart-table td {
+  padding: 0.7rem 0.55rem;
+  border-bottom: 1px solid #e5e9ed;
+  vertical-align: middle;
+}
+
+.atomy-request-cart-table thead th {
+  background: #f4f7fa;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-align: left;
+}
+
+.atomy-request-cart-table .product-quantity,
+.atomy-request-cart-table .product-subtotal {
+  text-align: center;
+  white-space: nowrap;
+}
+
+.atomy-request-cart-table tfoot td {
+  border-bottom: 0;
+}
+
+.atomy-request-cart__total {
+  text-align: right;
+  padding-top: 0.6rem;
+}
+
+.atomy-request-cart__total-inner {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.atomy-request-cart__total-label {
+  font-weight: 800;
+  font-size: 1rem;
+  color: #191919;
+}
+
+.atomy-request-cart__total-sum {
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: #ff2e7e;
+}
+
+.atomy-request-cart__product {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  min-width: 0;
+}
+
+.atomy-request-cart__thumb {
+  flex: 0 0 64px;
+}
+
+.atomy-request-cart__thumb img {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  border-radius: 10px;
+  background: #f4f7fa;
+}
+
+.atomy-request-cart__details {
+  min-width: 0;
+}
+
+.atomy-request-cart__name {
+  display: block;
+  font-weight: 700;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  color: #191919;
+}
+
+.atomy-request-cart__name:hover {
+  color: #00b6f0;
+}
+
+.atomy-request-cart__pv {
+  margin-top: 0.3rem;
+  font-size: 0.8rem;
+}
+
+.atomy-request-cart__pv .atomy-pv {
+  font-size: 0.8rem;
+}
+
+.atomy-request-cart__prices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.atomy-request-cart__price {
+  font-size: 0.88rem;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.atomy-request-cart__price--reg s {
+  color: #6b7280;
+}
+
+.atomy-request-cart__price--member strong {
+  color: #ff2e7e;
+  font-size: 0.95rem;
+}
+
+.atomy-request-cart__line-total {
+  color: #191919;
+  font-size: 0.95rem;
+}
+
+/* ================= Quantity stepper ================= */
+
+.atomy-qty {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.1rem;
+  padding: 0.15rem;
+  border: 1px solid #e5e9ed;
+  border-radius: 999px;
+  background: #fff;
+}
+
+.atomy-qty__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #f4f7fa;
+  color: #191919;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.atomy-qty__btn:hover {
+  background: #00b6f0;
+  color: #fff;
+}
+
+.atomy-qty__num {
+  min-width: 1.9rem;
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+/* Fading removal (~1s) */
+
+.atomy-request-cart-table tbody tr,
+.woocommerce-cart-form table.shop_table tbody tr,
+.atomy-qty--loop {
+  transition: opacity 0.95s ease;
+}
+
+tr.atomy-row-removing {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ================= Catalog loop stepper ================= */
+
+.atomy-loop-buy {
+  position: relative;
+}
+
+.atomy-loop-buy.has-qty .add_to_cart_button {
+  display: none !important;
+}
+
+.atomy-loop-buy .added_to_cart {
+  display: none !important;
+}
+
+.atomy-qty--loop {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.atomy-qty--loop[hidden] {
+  display: none !important;
+}
+
+.atomy-qty--loop .atomy-qty__btn {
+  width: 2.2rem;
+  height: 2.2rem;
+}
+
+.atomy-qty--loop .atomy-qty__num {
+  flex: 1;
+  font-size: 1rem;
+  align-self: center;
+}
+
+.atomy-loop-buy.is-removing .atomy-qty--loop {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ================= WooCommerce cart page ================= */
+
+.woocommerce-cart-form button[name="update_cart"],
+.woocommerce-cart-form input[name="update_cart"],
+.woocommerce-cart-form .coupon {
+  display: none !important;
+}
+
+.atomy-qty-wc {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 0.1rem;
+  padding: 0.15rem;
+  border: 1px solid #e5e9ed;
+  border-radius: 999px;
+  background: #fff;
+}
+
+.atomy-qty-wc input.qty {
+  width: 2.4rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.95rem;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.atomy-qty-wc input.qty::-webkit-outer-spin-button,
+.atomy-qty-wc input.qty::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* ================= Mobile ================= */
+
+@media (max-width: 768px) {
+  .atomy-request-cart-table thead {
+    display: none;
+  }
+
+  .atomy-request-cart-table tbody tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid #e5e9ed;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .atomy-request-cart-table {
+    border: 0;
+    border-radius: 0;
+    overflow: visible;
+  }
+
+  .atomy-request-cart-table tbody td {
+    display: block;
+    text-align: right;
+    border-bottom: 1px solid #e5e9ed;
+  }
+
+  .atomy-request-cart-table tbody td:last-child {
+    border-bottom: 0;
+  }
+
+  .atomy-request-cart-table tbody td::before {
+    content: attr(data-title) ": ";
+    float: left;
+    font-weight: 700;
+    color: #6b7280;
+    padding-top: 0.2rem;
+  }
+
+  .atomy-request-cart-table .product-name {
+    text-align: left;
+  }
+
+  .atomy-request-cart-table .product-name::before {
+    display: none;
+  }
+
+  .atomy-request-cart-table tfoot tr {
+    display: block;
+  }
+
+  .atomy-request-cart-table .atomy-request-cart__total {
+    display: block;
+    text-align: right;
+    border: 0;
+    padding: 0.5rem 0 0;
+  }
+
+  .atomy-request-cart-table .atomy-request-cart__total::before {
+    display: none;
+  }
+
+  .atomy-request-cart__prices {
+    align-items: flex-end;
+    margin-left: auto;
+  }
+
+  .atomy-request-cart__product {
+    align-items: flex-start;
+  }
+}
+
+/* ================= Form ================= */
+
+.atomy-request-form .atomy-field {
+  margin-bottom: 1rem;
+}
+
+.atomy-request-form label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+.atomy-request-form input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d8dde0;
+  border-radius: 8px;
+}
+
+.atomy-btn {
+  display: inline-block;
+  padding: 0.85rem 1.5rem;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.atomy-btn--primary {
+  background: #00b6f0;
+  color: #fff;
+}
+
+.atomy-field__control {
+  position: relative;
+}
+
+.atomy-field__control input {
+  padding-right: 3rem;
+}
+
+.atomy-cal-toggle {
+  position: absolute;
+  top: 50%;
+  right: 0.4rem;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #666;
+  cursor: pointer;
+}
+
+.atomy-cal-toggle:hover,
+.atomy-cal-toggle:focus-visible,
+.atomy-cal-toggle[aria-expanded="true"] {
+  color: #00b6f0;
+  background: #f4f7fa;
+}
+
+.atomy-cal-toggle svg {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+/* ================= Datepicker ================= */
+
+.atomy-datepicker {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  z-index: 100;
+  width: min(21rem, 100%);
+  padding: 1rem;
+  background: #fff;
+  border: 1px solid #d8dde0;
+  border-radius: 12px;
+  box-shadow: 0 16px 40px rgba(25, 25, 25, 0.14);
+}
+
+.atomy-datepicker[hidden] {
+  display: none;
+}
+
+.atomy-datepicker__head {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.65rem;
+}
+
+.atomy-datepicker__nav {
+  flex: 0 0 2rem;
+  height: 2rem;
+  border: 0;
+  border-radius: 8px;
+  background: #f4f7fa;
+  color: #191919;
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.atomy-datepicker__nav:hover:not(:disabled) {
+  background: #00b6f0;
+  color: #fff;
+}
+
+.atomy-datepicker__nav:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.atomy-datepicker__select {
+  flex: 1 1 auto;
+  height: 2rem;
+  padding: 0 0.4rem;
+  border: 1px solid #d8dde0;
+  border-radius: 8px;
+  background: #fff;
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.atomy-datepicker__select--year {
+  flex: 0 0 5.4rem;
+}
+
+.atomy-datepicker__week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 0.15rem;
+}
+
+.atomy-datepicker__week span {
+  padding: 0.25rem 0;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #666;
+}
+
+.atomy-datepicker__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.atomy-datepicker__day {
+  aspect-ratio: 1;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  font: inherit;
+  font-size: 0.9rem;
+  color: #191919;
+  cursor: pointer;
+}
+
+.atomy-datepicker__day:hover:not(:disabled) {
+  background: #f4f7fa;
+}
+
+.atomy-datepicker__day.is-today {
+  box-shadow: inset 0 0 0 1px #00b6f0;
+}
+
+.atomy-datepicker__day.is-selected {
+  background: #00b6f0;
+  color: #fff;
+  font-weight: 600;
+}
+
+.atomy-datepicker__day:disabled {
+  color: #c3cbd1;
+  cursor: default;
+}
+
+/* ================= Errors / messages ================= */
+
+.atomy-field__error {
+  display: none;
+  color: #dd0707;
+  font-size: 0.85rem;
+  margin-top: 0.35rem;
+}
+
+.atomy-field.has-error .atomy-field__error {
+  display: block;
+}
+
+.atomy-field.has-error input {
+  border-color: #dd0707;
+}
+
+.atomy-request-message {
+  margin-top: 1rem;
+}
+
+.atomy-request-message.is-success {
+  color: #089634;
+}
+
+.atomy-request-message.is-error {
+  color: #dd0707;
+}
+
+/* ================= Price helpers ================= */
+
+.atomy-prices .atomy-price {
+  margin-bottom: 0.25rem;
+}
+
+.atomy-price__label {
+  color: #666;
+  font-size: 0.85rem;
+}
+
+.atomy-pv {
+  color: #00b6f0;
+  font-weight: 700;
+}
+
+.atomy-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0.5rem 0;
+}
+
+.atomy-badge {
+  background: #f4f7fa;
+  color: #191919;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
