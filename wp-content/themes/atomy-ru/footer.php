@@ -52,6 +52,10 @@
 		</div>
 	</div>
 </footer>
+<div class="cookie-notice" data-cookie-notice hidden>
+	<p class="cookie-notice__text">Мы используем файлы cookie для работы сайта и корзины. Продолжая пользоваться сайтом, вы соглашаетесь с <a href="<?php echo esc_url( home_url( '/privacy/#cookies' ) ); ?>">политикой конфиденциальности</a>.</p>
+	<button type="button" class="cookie-notice__btn" data-cookie-accept>Принять</button>
+</div>
 <?php wp_footer(); ?>
 </body>
 </html>

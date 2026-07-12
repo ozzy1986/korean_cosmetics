@@ -79,7 +79,26 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   initWishlist();
+  initCookieNotice();
 });
+
+function initCookieNotice() {
+  var KEY = 'atomy_cookie_consent';
+  var notice = document.querySelector('[data-cookie-notice]');
+  if (!notice) { return; }
+  try {
+    if (localStorage.getItem(KEY)) { return; }
+  } catch (e) { return; }
+  notice.hidden = false;
+  var btn = notice.querySelector('[data-cookie-accept]');
+  if (btn) {
+    btn.addEventListener('click', function () {
+      try { localStorage.setItem(KEY, '1'); } catch (e) {}
+      notice.classList.add('is-hiding');
+      setTimeout(function () { notice.hidden = true; }, 250);
+    });
+  }
+}
 
 function initWishlist() {
   var KEY = 'atomy_wishlist';

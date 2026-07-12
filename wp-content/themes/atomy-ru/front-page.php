@@ -22,50 +22,38 @@ if ( $banners ) {
 }
 $shop_url = get_permalink( wc_get_page_id( 'shop' ) );
 ?>
-<section class="hero-intro">
-	<div class="container hero-intro__grid">
-		<div class="hero-intro__panel">
-			<span class="hero-intro__eyebrow">Официальный дистрибьютор Atomy</span>
-			<h1 class="hero-intro__title">Корейское качество по честной цене</h1>
-			<p class="hero-intro__subtitle">Косметика, витамины и товары для дома из Южной Кореи — напрямую от производителя, с бесплатной доставкой по России.</p>
-			<div class="hero-intro__cta">
-				<a class="btn btn--light" href="<?php echo esc_url( $shop_url ); ?>">Смотреть каталог</a>
-				<a class="btn btn--outline" href="<?php echo esc_url( home_url( '/request/' ) ); ?>">Оформить заявку</a>
-			</div>
-			<ul class="hero-intro__facts">
-				<li><strong>500+</strong><span>товаров в каталоге</span></li>
-				<li><strong>0 ₽</strong><span>доставка по России</span></li>
-				<li><strong>50+</strong><span>стран доверяют Atomy</span></li>
-			</ul>
-		</div>
-		<?php if ( $banners ) : ?>
-		<div class="hero-intro__media" data-hero-slider>
-			<div class="hero-slider__track">
-				<?php foreach ( $banners as $i => $banner ) : ?>
-					<?php
-					$img  = esc_url( $banner['image'] ?? '' );
-					$link = esc_url( $banner['link'] ?? $shop_url );
-					if ( ! $img ) {
-						continue;
-					}
-					?>
-					<a class="hero-slide<?php echo 0 === $i ? ' is-active' : ''; ?>" href="<?php echo $link; ?>" data-slide>
-						<img src="<?php echo $img; ?>" alt="" loading="<?php echo 0 === $i ? 'eager' : 'lazy'; ?>" />
-					</a>
-				<?php endforeach; ?>
-				<button type="button" class="hero-slider__btn hero-slider__btn--prev" data-slide-prev aria-label="Назад">&lsaquo;</button>
-				<button type="button" class="hero-slider__btn hero-slider__btn--next" data-slide-next aria-label="Вперёд">&rsaquo;</button>
-			</div>
-			<div class="hero-slider__dots" data-slide-dots></div>
-		</div>
-		<?php else : ?>
-		<div class="hero-intro__media hero-intro__media--art" aria-hidden="true">
-			<div class="hero__blob hero__blob--1"></div>
-			<div class="hero__blob hero__blob--2"></div>
-		</div>
-		<?php endif; ?>
+<?php if ( $banners ) : ?>
+<section class="hero-slider" data-hero-slider>
+	<div class="hero-slider__track">
+		<?php foreach ( $banners as $i => $banner ) : ?>
+			<?php
+			$img  = esc_url( $banner['image'] ?? '' );
+			$link = esc_url( $banner['link'] ?? $shop_url );
+			if ( ! $img ) {
+				continue;
+			}
+			?>
+			<a class="hero-slide<?php echo 0 === $i ? ' is-active' : ''; ?>" href="<?php echo $link; ?>" data-slide>
+				<img src="<?php echo $img; ?>" alt="" loading="<?php echo 0 === $i ? 'eager' : 'lazy'; ?>" />
+			</a>
+		<?php endforeach; ?>
+		<button type="button" class="hero-slider__btn hero-slider__btn--prev" data-slide-prev aria-label="Назад">&lsaquo;</button>
+		<button type="button" class="hero-slider__btn hero-slider__btn--next" data-slide-next aria-label="Вперёд">&rsaquo;</button>
+		<div class="hero-slider__dots" data-slide-dots></div>
 	</div>
 </section>
+<?php else : ?>
+<section class="hero">
+	<div class="container hero__inner">
+		<div class="hero__text">
+			<span class="hero__eyebrow">Официальный дистрибьютор Atomy</span>
+			<h1 class="hero__title">Корейское качество<br>по честной цене</h1>
+			<p class="hero__subtitle">Косметика, витамины и товары для дома из Южной Кореи — напрямую от производителя.</p>
+			<a class="btn btn--primary hero__cta" href="<?php echo esc_url( $shop_url ); ?>">Перейти в каталог</a>
+		</div>
+	</div>
+</section>
+<?php endif; ?>
 
 <section class="container perks">
 	<ul class="perks__list">
