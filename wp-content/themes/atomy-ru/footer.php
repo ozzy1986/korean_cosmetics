@@ -42,8 +42,13 @@
 		</div>
 	</div>
 	<div class="site-footer__bottom">
-		<div class="container">
-			<span>&copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> ATOMY RUSSIA. Клон витрины в учебных целях.</span>
+		<div class="container site-footer__bottom-inner">
+			<span>&copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> Официальный дистрибьютор ATOMY в России</span>
+			<nav class="site-footer__legal">
+				<a href="<?php echo esc_url( home_url( '/terms/' ) ); ?>">Пользовательское соглашение</a>
+				<span class="site-footer__legal-sep">|</span>
+				<a href="<?php echo esc_url( home_url( '/privacy/' ) ); ?>">Политика конфиденциальности</a>
+			</nav>
 		</div>
 	</div>
 </footer>

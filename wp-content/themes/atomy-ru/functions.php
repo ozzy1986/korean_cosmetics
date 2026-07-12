@@ -157,6 +157,10 @@ function atomy_ru_product_search( WP_Query $query ): void {
 add_action( 'pre_get_posts', 'atomy_ru_product_search' );
 
 function atomy_ru_homepage_banners(): array {
+	static $cached = null;
+	if ( null !== $cached ) {
+		return $cached;
+	}
 	$candidates = array(
 		ABSPATH . 'project/data/homepage.json',
 		get_template_directory() . '/data/homepage.json',
@@ -164,6 +168,7 @@ function atomy_ru_homepage_banners(): array {
 	$upload    = wp_upload_dir();
 	$local_dir = trailingslashit( $upload['basedir'] ) . 'banners/';
 	$local_url = trailingslashit( $upload['baseurl'] ) . 'banners/';
+	$slides    = array();
 	foreach ( $candidates as $file ) {
 		if ( ! file_exists( $file ) ) {
 			continue;
@@ -173,7 +178,6 @@ function atomy_ru_homepage_banners(): array {
 			continue;
 		}
 		// Only PNG/JPG are real main-visual slides; SVG entries are sub-brand logos and category quick-links.
-		$slides = array();
 		foreach ( $data['banners'] as $banner ) {
 			$img = (string) ( $banner['image'] ?? '' );
 			if ( ! preg_match( '/\.(png|jpe?g)(\?.*)?$/i', $img ) ) {
@@ -184,14 +188,87 @@ function atomy_ru_homepage_banners(): array {
 			if ( $basename && file_exists( $local_dir . $basename ) ) {
 				$banner['image'] = $local_url . $basename;
 			}
-			$slides[] = $banner;
+			$banner['link'] = atomy_ru_localize_banner_link( (string) ( $banner['link'] ?? '' ) );
+			$slides[]       = $banner;
 		}
 		if ( $slides ) {
-			return $slides;
+			break;
 		}
 	}
-	return array();
+	$cached = $slides;
+	return $cached;
 }
+
+/**
+ * Map donor atomy.ru banner URLs onto this site's pages.
+ *
+ * Category deep links resolve via the _atomy_disp_ctg_no term meta,
+ * product links via SKU; anything unresolvable falls back to the shop page.
+ */
+function atomy_ru_localize_banner_link( string $link ): string {
+	$shop = (string) get_permalink( wc_get_page_id( 'shop' ) );
+	if ( '' === $link ) {
+		return $shop;
+	}
+	$host      = strtolower( (string) wp_parse_url( $link, PHP_URL_HOST ) );
+	$site_host = strtolower( (string) wp_parse_url( home_url(), PHP_URL_HOST ) );
+	if ( '' === $host || $host === $site_host ) {
+		return $link;
+	}
+
+	parse_str( (string) wp_parse_url( $link, PHP_URL_QUERY ), $query );
+	if ( ! empty( $query['dispCtgNo'] ) ) {
+		$terms = get_terms(
+			array(
+				'taxonomy'   => 'product_cat',
+				'hide_empty' => false,
+				'number'     => 1,
+				'meta_key'   => '_atomy_disp_ctg_no',
+				'meta_value' => (string) $query['dispCtgNo'],
+			)
+		);
+		if ( ! is_wp_error( $terms ) && $terms ) {
+			$term_link = get_term_link( $terms[0] );
+			if ( ! is_wp_error( $term_link ) ) {
+				return $term_link;
+			}
+		}
+		return $shop;
+	}
+
+	$path = (string) wp_parse_url( $link, PHP_URL_PATH );
+	if ( preg_match( '~/product/([A-Za-z0-9_-]+)~', $path, $m ) ) {
+		$product_id = wc_get_product_id_by_sku( $m[1] );
+		if ( $product_id ) {
+			return (string) get_permalink( $product_id );
+		}
+	}
+	return $shop;
+}
+
+/**
+ * Ensure legal pages exist; content lives in page-{slug}.php templates.
+ */
+function atomy_ru_ensure_legal_pages(): void {
+	$pages = array(
+		'terms'   => 'Пользовательское соглашение',
+		'privacy' => 'Политика конфиденциальности',
+	);
+	foreach ( $pages as $slug => $title ) {
+		if ( get_page_by_path( $slug ) ) {
+			continue;
+		}
+		wp_insert_post(
+			array(
+				'post_title'  => $title,
+				'post_name'   => $slug,
+				'post_status' => 'publish',
+				'post_type'   => 'page',
+			)
+		);
+	}
+}
+add_action( 'init', 'atomy_ru_ensure_legal_pages', 20 );
 
 /**
  * Resolve the tile visual for a product category.

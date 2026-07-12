@@ -1,6 +1,6 @@
 <?php
 /**
- * Front page: hero slider, category tiles, product rails.
+ * Front page: intro panel with slider, perks, category tiles, product rails.
  *
  * @package Atomy_RU
  */
@@ -20,49 +20,91 @@ $banners   = function_exists( 'atomy_ru_homepage_banners' ) ? atomy_ru_homepage_
 if ( $banners ) {
 	$banners = array_slice( $banners, 0, 8 );
 }
+$shop_url = get_permalink( wc_get_page_id( 'shop' ) );
 ?>
-<?php if ( $banners ) : ?>
-<section class="hero-slider" data-hero-slider>
-	<div class="hero-slider__track">
-		<?php foreach ( $banners as $i => $banner ) : ?>
-			<?php
-			$img  = esc_url( $banner['image'] ?? '' );
-			$link = esc_url( $banner['link'] ?? get_permalink( wc_get_page_id( 'shop' ) ) );
-			if ( ! $img ) {
-				continue;
-			}
-			?>
-			<a class="hero-slide<?php echo 0 === $i ? ' is-active' : ''; ?>" href="<?php echo $link; ?>" data-slide>
-				<img src="<?php echo $img; ?>" alt="" loading="<?php echo 0 === $i ? 'eager' : 'lazy'; ?>" />
-			</a>
-		<?php endforeach; ?>
-	</div>
-	<button type="button" class="hero-slider__btn hero-slider__btn--prev" data-slide-prev aria-label="Назад">&lsaquo;</button>
-	<button type="button" class="hero-slider__btn hero-slider__btn--next" data-slide-next aria-label="Вперёд">&rsaquo;</button>
-	<div class="hero-slider__dots" data-slide-dots></div>
-</section>
-<?php else : ?>
-<section class="hero">
-	<div class="container hero__inner">
-		<div class="hero__text">
-			<span class="hero__eyebrow">ATOMY RUSSIA</span>
-			<h1 class="hero__title">Премиальное качество<br>по абсолютной цене</h1>
-			<p class="hero__subtitle">Косметика, здоровье и товары для дома от мировых лабораторий Atomy.</p>
-			<a class="btn btn--primary hero__cta" href="<?php echo esc_url( get_permalink( wc_get_page_id( 'shop' ) ) ); ?>">Перейти в каталог</a>
+<section class="hero-intro">
+	<div class="container hero-intro__grid">
+		<div class="hero-intro__panel">
+			<span class="hero-intro__eyebrow">Официальный дистрибьютор Atomy</span>
+			<h1 class="hero-intro__title">Корейское качество по честной цене</h1>
+			<p class="hero-intro__subtitle">Косметика, витамины и товары для дома из Южной Кореи — напрямую от производителя, с бесплатной доставкой по России.</p>
+			<div class="hero-intro__cta">
+				<a class="btn btn--light" href="<?php echo esc_url( $shop_url ); ?>">Смотреть каталог</a>
+				<a class="btn btn--outline" href="<?php echo esc_url( home_url( '/request/' ) ); ?>">Оформить заявку</a>
+			</div>
+			<ul class="hero-intro__facts">
+				<li><strong>500+</strong><span>товаров в каталоге</span></li>
+				<li><strong>0 ₽</strong><span>доставка по России</span></li>
+				<li><strong>50+</strong><span>стран доверяют Atomy</span></li>
+			</ul>
 		</div>
+		<?php if ( $banners ) : ?>
+		<div class="hero-intro__media" data-hero-slider>
+			<div class="hero-slider__track">
+				<?php foreach ( $banners as $i => $banner ) : ?>
+					<?php
+					$img  = esc_url( $banner['image'] ?? '' );
+					$link = esc_url( $banner['link'] ?? $shop_url );
+					if ( ! $img ) {
+						continue;
+					}
+					?>
+					<a class="hero-slide<?php echo 0 === $i ? ' is-active' : ''; ?>" href="<?php echo $link; ?>" data-slide>
+						<img src="<?php echo $img; ?>" alt="" loading="<?php echo 0 === $i ? 'eager' : 'lazy'; ?>" />
+					</a>
+				<?php endforeach; ?>
+				<button type="button" class="hero-slider__btn hero-slider__btn--prev" data-slide-prev aria-label="Назад">&lsaquo;</button>
+				<button type="button" class="hero-slider__btn hero-slider__btn--next" data-slide-next aria-label="Вперёд">&rsaquo;</button>
+			</div>
+			<div class="hero-slider__dots" data-slide-dots></div>
+		</div>
+		<?php else : ?>
+		<div class="hero-intro__media hero-intro__media--art" aria-hidden="true">
+			<div class="hero__blob hero__blob--1"></div>
+			<div class="hero__blob hero__blob--2"></div>
+		</div>
+		<?php endif; ?>
 	</div>
 </section>
-<?php endif; ?>
+
+<section class="container perks">
+	<ul class="perks__list">
+		<li class="perks__item">
+			<span class="perks__icon">
+				<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 3h13v13H1zM14 8h4l3 3v5h-7M5.5 19a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM18.5 19a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
+			</span>
+			<span class="perks__text"><strong>Бесплатная доставка</strong><span>до пункта выдачи по всей России</span></span>
+		</li>
+		<li class="perks__item">
+			<span class="perks__icon">
+				<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/><path d="M8.5 12l2.5 2.5L16 9.5"/></svg>
+			</span>
+			<span class="perks__text"><strong>Оригинальная продукция</strong><span>напрямую от Atomy Co., Ltd</span></span>
+		</li>
+		<li class="perks__item">
+			<span class="perks__icon">
+				<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0l-7-7A2 2 0 0 1 3 12.2V5a2 2 0 0 1 2-2h7.2a2 2 0 0 1 1.4.6l7 7a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.2"/></svg>
+			</span>
+			<span class="perks__text"><strong>Цены без наценки</strong><span>экономия до 30% после регистрации</span></span>
+		</li>
+		<li class="perks__item">
+			<span class="perks__icon">
+				<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+			</span>
+			<span class="perks__text"><strong>Поддержка дистрибьютора</strong><span>поможем с выбором и заказом</span></span>
+		</li>
+	</ul>
+</section>
 
 <?php if ( $home_cats ) : ?>
 <section class="container cat-tiles-section">
+	<h2 class="section-title">Выбирайте по категориям</h2>
 	<div class="cat-tiles-scroll">
 		<div class="cat-tiles">
 			<?php
 			foreach ( $home_cats as $term ) :
 				$tile    = function_exists( 'atomy_ru_category_image' ) ? atomy_ru_category_image( $term ) : array( 'url' => '', 'kind' => '' );
 				$initial = function_exists( 'mb_substr' ) ? mb_substr( $term->name, 0, 1 ) : substr( $term->name, 0, 1 );
-				$kind    = $tile['kind'] ? $tile['kind'] : 'none';
 				?>
 				<a class="cat-tile" href="<?php echo esc_url( get_term_link( $term ) ); ?>">
 					<?php if ( 'icon' === $tile['kind'] ) : ?>
@@ -89,7 +131,7 @@ if ( $banners ) {
 <section class="container rail">
 	<div class="rail__head">
 		<h2 class="rail__title">Первый шаг в Атоми: с чего начать?</h2>
-		<a class="rail__more" href="<?php echo esc_url( get_permalink( wc_get_page_id( 'shop' ) ) ); ?>">Смотреть все</a>
+		<a class="rail__more" href="<?php echo esc_url( $shop_url ); ?>">Смотреть все</a>
 	</div>
 	<div class="products-grid">
 		<?php echo do_shortcode( '[products limit="8" columns="4" orderby="date" order="ASC"]' ); ?>
@@ -98,18 +140,23 @@ if ( $banners ) {
 
 <section class="promo-strip">
 	<div class="container promo-strip__inner">
-		<span>Электронный каталог всегда под рукой</span>
-		<a class="btn btn--ghost" href="<?php echo esc_url( get_permalink( wc_get_page_id( 'shop' ) ) ); ?>">Открыть каталог</a>
+		<div class="promo-strip__text">
+			<span class="promo-strip__title">Не знаете, с чего начать?</span>
+			<span class="promo-strip__sub">Оставьте заявку — поможем с выбором и оформим заказ с бесплатной доставкой.</span>
+		</div>
+		<a class="btn btn--light" href="<?php echo esc_url( home_url( '/request/' ) ); ?>">Оформить заявку</a>
 	</div>
 </section>
 
-<section class="container rail">
-	<div class="rail__head">
-		<h2 class="rail__title">Бестселлеры</h2>
-		<a class="rail__more" href="<?php echo esc_url( get_permalink( wc_get_page_id( 'shop' ) ) ); ?>">Смотреть все</a>
-	</div>
-	<div class="products-grid">
-		<?php echo do_shortcode( '[products limit="8" columns="4" orderby="popularity"]' ); ?>
+<section class="rail rail--band">
+	<div class="container">
+		<div class="rail__head">
+			<h2 class="rail__title">Бестселлеры</h2>
+			<a class="rail__more" href="<?php echo esc_url( $shop_url ); ?>">Смотреть все</a>
+		</div>
+		<div class="products-grid">
+			<?php echo do_shortcode( '[products limit="8" columns="4" orderby="popularity"]' ); ?>
+		</div>
 	</div>
 </section>
 
