@@ -28,3 +28,6 @@ function test_summary(): void {
 	echo "ALL TESTS PASSED ({$passed})\n";
 	exit( 0 );
 }
+
+require __DIR__ . '/test-seo-text.php';
+test_summary();

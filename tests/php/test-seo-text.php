@@ -5,7 +5,6 @@
 
 declare( strict_types=1 );
 
-require __DIR__ . '/run.php';
 require __DIR__ . '/../../wp-content/plugins/atomy-core/includes/services/class-seo-text.php';
 
 $seo = new Atomy_Seo_Text();
@@ -113,5 +112,3 @@ assert_true( is_string( $broken ), 'broken HTML returns string' );
 $cat_intro = $seo->category_intro( 'Здоровье', 42 );
 assert_true( str_contains( $cat_intro, 'Здоровье' ), 'category intro has name' );
 assert_true( str_contains( $cat_intro, '42' ), 'category intro has count' );
-
-test_summary();

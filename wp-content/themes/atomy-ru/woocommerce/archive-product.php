@@ -14,8 +14,8 @@ get_header( 'shop' );
 	<div class="atomy-shop-main">
 		<?php if ( apply_filters( 'woocommerce_show_page_title', true ) ) : ?>
 			<h1 class="section-title"><?php woocommerce_page_title(); ?></h1>
-			<?php if ( function_exists( 'atomy_seo_category_intro' ) ) : ?>
-				<?php $intro = atomy_seo_category_intro(); ?>
+			<?php if ( is_product_category() && function_exists( 'atomy_seo_category_intro' ) ) : ?>
+				<?php $intro = atomy_seo_category_intro( get_queried_object() ); ?>
 				<?php if ( $intro ) : ?>
 					<p class="archive-intro"><?php echo esc_html( $intro ); ?></p>
 				<?php endif; ?>

@@ -81,14 +81,15 @@ class Atomy_Seo {
 	}
 
 	/**
-	 * @param bool   $enabled
-	 * @param string $name
+	 * @param WP_Sitemaps_Provider|false $provider
+	 * @param string                     $name
+	 * @return WP_Sitemaps_Provider|false
 	 */
-	public function filter_sitemaps_providers( bool $enabled, string $name ): bool {
+	public function filter_sitemaps_providers( $provider, string $name ) {
 		if ( 'users' === $name ) {
 			return false;
 		}
-		return $enabled;
+		return $provider;
 	}
 
 	/**
