@@ -35,6 +35,12 @@
 			</ul>
 		</div>
 	</div>
+	<div class="site-footer__disclaimer">
+		<div class="container">
+			<p>Данный сайт является сайтом партнёра-дистрибьютора компании Atomy.</p>
+			<p>Сайт информационный, не магазин: заказы оформляются через дистрибьютора.</p>
+		</div>
+	</div>
 	<div class="site-footer__bottom">
 		<div class="container">
 			<span>&copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> ATOMY RUSSIA. Клон витрины в учебных целях.</span>

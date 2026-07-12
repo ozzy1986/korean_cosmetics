@@ -35,7 +35,13 @@ $atomy_cats = is_wp_error( $atomy_cats ) ? array() : $atomy_cats;
 	<div class="header-bar">
 		<div class="container header-bar__inner">
 			<a class="site-logo" href="<?php echo esc_url( home_url( '/' ) ); ?>">
-				<img class="site-logo__img" src="https://resource.atomy.ru/20260610134910/fo/images/common/CI-blue_68.svg" alt="ATOMY" width="120" height="32" />
+				<span class="site-logo__brand">
+					<img class="site-logo__img" src="https://resource.atomy.ru/20260610134910/fo/images/common/CI-blue_68.svg" alt="ATOMY" width="120" height="32" />
+					<span class="site-logo__tagline">
+						<span>Официальный</span>
+						<span>дистрибьютор</span>
+					</span>
+				</span>
 			</a>
 			<form class="header-search" role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>">
 				<input type="search" name="s" placeholder="Введите запрос, чтобы найти" value="<?php echo esc_attr( get_search_query() ); ?>" aria-label="Поиск" />
