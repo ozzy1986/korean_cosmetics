@@ -78,7 +78,7 @@
   /* ================= WooCommerce cart page: +/- around qty inputs ================= */
 
   function enhanceWcQty() {
-    $('.woocommerce-cart-form td.product-quantity .quantity').each(function () {
+    $('.woocommerce-cart-form td.product-quantity .quantity, form.cart .quantity').each(function () {
       var $q = $(this);
       if ($q.hasClass('atomy-qty-wc')) {
         return;
