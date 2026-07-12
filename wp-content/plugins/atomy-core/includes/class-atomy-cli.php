@@ -15,6 +15,8 @@ class Atomy_Core_CLI {
 		WP_CLI::add_command( 'atomy import', array( __CLASS__, 'import' ) );
 		WP_CLI::add_command( 'atomy telegram:resolve-chat', array( __CLASS__, 'resolve_chat' ) );
 		WP_CLI::add_command( 'atomy settings:apply-secrets', array( __CLASS__, 'apply_secrets' ) );
+		WP_CLI::add_command( 'atomy seo:enrich', array( __CLASS__, 'seo_enrich' ) );
+		WP_CLI::add_command( 'atomy seo:verification', array( __CLASS__, 'seo_verification' ) );
 	}
 
 	/**
@@ -78,5 +80,45 @@ class Atomy_Core_CLI {
 			)
 		);
 		WP_CLI::success( 'Secrets applied.' );
+	}
+
+	/**
+	 * Enrich product SEO: excerpt, description alts, attachment alts.
+	 *
+	 * ## OPTIONS
+	 *
+	 * [--dry-run]
+	 * : Preview changes without saving.
+	 *
+	 * [--force]
+	 * : Overwrite existing excerpts.
+	 *
+	 * [--limit=<n>]
+	 * : Limit number of products processed.
+	 */
+	public static function seo_enrich( array $args, array $assoc_args ): void {
+		$dry_run = isset( $assoc_args['dry-run'] );
+		$force   = isset( $assoc_args['force'] );
+		$limit   = isset( $assoc_args['limit'] ) ? max( 0, (int) $assoc_args['limit'] ) : 0;
+		$result  = atomy_core()->seo->enrich_products( $dry_run, $force, $limit );
+		WP_CLI::success( wp_json_encode( $result ) );
+	}
+
+	/**
+	 * Save search engine verification codes.
+	 *
+	 * ## OPTIONS
+	 *
+	 * [--google=<code>]
+	 * : Google Search Console verification code.
+	 *
+	 * [--yandex=<code>]
+	 * : Yandex Webmaster verification code.
+	 */
+	public static function seo_verification( array $args, array $assoc_args ): void {
+		$google = (string) ( $assoc_args['google'] ?? '' );
+		$yandex = (string) ( $assoc_args['yandex'] ?? '' );
+		atomy_core()->seo->save_verification_codes( $google, $yandex );
+		WP_CLI::success( 'Verification codes saved.' );
 	}
 }

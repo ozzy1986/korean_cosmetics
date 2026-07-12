@@ -132,19 +132,6 @@ class Atomy_Core_Importer {
 			$reg    = (float) ( $row['reg_price'] ?? 0 );
 			$pv     = (float) ( $row['pv'] ?? 0 );
 
-			$product->set_sku( $sku );
-			$product->set_regular_price( $member > 0 ? (string) $member : (string) $reg );
-			$product->set_manage_stock( false );
-			$product->set_stock_status( 'instock' );
-			$product->set_catalog_visibility( 'visible' );
-			$product->set_description( $this->clean_description_html( (string) ( $row['description_html'] ?? '' ) ) );
-			$product->update_meta_data( '_atomy_reg_price', $reg );
-			$product->update_meta_data( '_atomy_member_price', $member );
-			$product->update_meta_data( '_atomy_pv', $pv );
-			$product->update_meta_data( '_atomy_goods_no', $sku );
-			$product->update_meta_data( '_atomy_badges', $row['badges'] ?? array() );
-			$product->save();
-
 			$cat_ids = array();
 			if ( isset( $sku_terms[ $sku ] ) ) {
 				$cat_ids = array_values( $sku_terms[ $sku ] );
@@ -155,6 +142,41 @@ class Atomy_Core_Importer {
 				}
 			}
 			$cat_ids = array_values( array_unique( array_map( 'intval', $cat_ids ) ) );
+
+			$product->set_sku( $sku );
+			$product->set_regular_price( $member > 0 ? (string) $member : (string) $reg );
+			$product->set_manage_stock( false );
+			$product->set_stock_status( 'instock' );
+			$product->set_catalog_visibility( 'visible' );
+			$clean_desc = $this->clean_description_html( (string) ( $row['description_html'] ?? '' ) );
+			$seo_text   = new Atomy_Seo_Text();
+			$product_name = sanitize_text_field( $row['name'] ?? $sku );
+			$cat_name   = '';
+			if ( $cat_ids ) {
+				$first_term = get_term( (int) $cat_ids[0], 'product_cat' );
+				if ( $first_term && ! is_wp_error( $first_term ) ) {
+					$cat_name = $first_term->name;
+				}
+			}
+			$intro = $seo_text->product_intro(
+				array(
+					'name'         => $product_name,
+					'category'     => $cat_name,
+					'tags'         => (array) ( $row['tags'] ?? array() ),
+					'badges'       => (array) ( $row['badges'] ?? array() ),
+					'member_price' => $member,
+					'pv'           => $pv,
+				)
+			);
+			$product->set_description( $seo_text->enhance_description_html( $clean_desc, $product_name ) );
+			$product->set_short_description( $intro );
+			$product->update_meta_data( '_atomy_reg_price', $reg );
+			$product->update_meta_data( '_atomy_member_price', $member );
+			$product->update_meta_data( '_atomy_pv', $pv );
+			$product->update_meta_data( '_atomy_goods_no', $sku );
+			$product->update_meta_data( '_atomy_badges', $row['badges'] ?? array() );
+			$product->save();
+
 			if ( $cat_ids ) {
 				wp_set_object_terms( $product_id, $cat_ids, 'product_cat' );
 			}

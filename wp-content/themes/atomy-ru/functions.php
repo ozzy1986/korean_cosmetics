@@ -60,6 +60,45 @@ function atomy_ru_assets(): void {
 }
 add_action( 'wp_enqueue_scripts', 'atomy_ru_assets', 20 );
 
+function atomy_ru_dequeue_wc_blocks_style(): void {
+	wp_dequeue_style( 'wc-blocks-style' );
+}
+add_action( 'wp_enqueue_scripts', 'atomy_ru_dequeue_wc_blocks_style', 100 );
+
+remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+remove_action( 'wp_print_styles', 'print_emoji_styles' );
+
+function atomy_ru_resource_hints( array $urls, string $relation_type ): array {
+	if ( 'preconnect' === $relation_type ) {
+		$urls[] = array(
+			'href'        => 'https://fonts.gstatic.com',
+			'crossorigin' => 'anonymous',
+		);
+	}
+	return $urls;
+}
+add_filter( 'wp_resource_hints', 'atomy_ru_resource_hints', 10, 2 );
+
+function atomy_ru_document_title( string $title ): string {
+	if ( is_front_page() ) {
+		return 'Atomy Россия — каталог официального дистрибьютора: цены, PV, доставка';
+	}
+	return $title;
+}
+add_filter( 'pre_get_document_title', 'atomy_ru_document_title' );
+
+function atomy_ru_preload_home_banner(): void {
+	if ( ! is_front_page() ) {
+		return;
+	}
+	$banners = atomy_ru_homepage_banners();
+	if ( empty( $banners[0]['image'] ) ) {
+		return;
+	}
+	echo '<link rel="preload" as="image" href="' . esc_url( $banners[0]['image'] ) . '" fetchpriority="high" />' . "\n";
+}
+add_action( 'wp_head', 'atomy_ru_preload_home_banner', 1 );
+
 function atomy_ru_cart_count_fragment( array $fragments ): array {
 	ob_start();
 	?>
@@ -187,6 +226,10 @@ function atomy_ru_homepage_banners(): array {
 			$basename = basename( (string) wp_parse_url( $img, PHP_URL_PATH ) );
 			if ( $basename && file_exists( $local_dir . $basename ) ) {
 				$banner['image'] = $local_url . $basename;
+				$webp_basename   = preg_replace( '/\.(png|jpe?g)$/i', '.webp', $basename );
+				if ( $webp_basename && file_exists( $local_dir . $webp_basename ) ) {
+					$banner['image'] = $local_url . $webp_basename;
+				}
 			}
 			$banner['link'] = atomy_ru_localize_banner_link( (string) ( $banner['link'] ?? '' ) );
 			$slides[]       = $banner;

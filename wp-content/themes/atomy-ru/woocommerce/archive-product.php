@@ -14,6 +14,12 @@ get_header( 'shop' );
 	<div class="atomy-shop-main">
 		<?php if ( apply_filters( 'woocommerce_show_page_title', true ) ) : ?>
 			<h1 class="section-title"><?php woocommerce_page_title(); ?></h1>
+			<?php if ( function_exists( 'atomy_seo_category_intro' ) ) : ?>
+				<?php $intro = atomy_seo_category_intro(); ?>
+				<?php if ( $intro ) : ?>
+					<p class="archive-intro"><?php echo esc_html( $intro ); ?></p>
+				<?php endif; ?>
+			<?php endif; ?>
 		<?php endif; ?>
 		<?php do_action( 'woocommerce_before_main_content' ); ?>
 		<?php if ( woocommerce_product_loop() ) : ?>

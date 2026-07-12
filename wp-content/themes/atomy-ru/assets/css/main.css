@@ -42,6 +42,18 @@ img { max-width: 100%; height: auto; display: block; }
   margin: 0 auto;
 }
 
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -396,6 +408,13 @@ img { max-width: 100%; height: auto; display: block; }
 .rail__title { font-size: 1.5rem; font-weight: 800; margin: 0; }
 .rail__more { font-weight: 600; font-size: 0.9rem; }
 .section-title { font-size: 1.5rem; font-weight: 800; margin: 0 0 1.25rem; }
+.archive-intro {
+  color: var(--atomy-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: -0.75rem 0 1.25rem;
+  max-width: 48rem;
+}
 
 /* ---------- Product grid + cards ---------- */
 .products-grid ul.products,
@@ -595,6 +614,19 @@ ul.products li.product .button:hover,
   line-height: 1.25;
   font-weight: 800;
   margin: 0 0 0.5rem;
+}
+.single-product .woocommerce-product-details__short-description {
+  color: var(--atomy-muted);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  max-width: 28rem;
+  margin: 0 0 0.75rem;
+}
+.single-product .woocommerce-product-details__short-description p {
+  margin: 0 0 0.5rem;
+}
+.single-product .woocommerce-product-details__short-description p:last-child {
+  margin-bottom: 0;
 }
 .single-product .summary .atomy-badges { margin: 0.5rem 0 0.75rem; }
 .single-product .atomy-summary-prices { max-width: 28rem; margin: 0.75rem 0 1rem; }

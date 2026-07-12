@@ -17,6 +17,8 @@ require_once ATOMY_CORE_DIR . 'includes/services/class-settings.php';
 require_once ATOMY_CORE_DIR . 'includes/services/class-importer.php';
 require_once ATOMY_CORE_DIR . 'includes/services/class-store.php';
 require_once ATOMY_CORE_DIR . 'includes/services/class-wishlist.php';
+require_once ATOMY_CORE_DIR . 'includes/services/class-seo-text.php';
+require_once ATOMY_CORE_DIR . 'includes/services/class-seo.php';
 require_once ATOMY_CORE_DIR . 'includes/class-atomy-cli.php';
 
 /**
@@ -51,6 +53,9 @@ class Atomy_Core {
 	/** @var Atomy_Core_Wishlist */
 	public $wishlist;
 
+	/** @var Atomy_Seo */
+	public $seo;
+
 	public static function instance(): Atomy_Core {
 		if ( null === self::$instance ) {
 			self::$instance = new self();
@@ -83,6 +88,7 @@ class Atomy_Core {
 		$this->importer      = new Atomy_Core_Importer();
 		$this->store         = new Atomy_Core_Store();
 		$this->wishlist      = new Atomy_Core_Wishlist();
+		$this->seo           = new Atomy_Seo();
 
 		$this->prices->register();
 		$this->request_mode->register();
@@ -92,6 +98,7 @@ class Atomy_Core {
 		$this->importer->register();
 		$this->store->register();
 		$this->wishlist->register();
+		$this->seo->register();
 
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
 			Atomy_Core_CLI::register();
@@ -132,4 +139,13 @@ function atomy_badges_html( $product = null ): string {
  */
 function atomy_wishlist_url(): string {
 	return atomy_core()->wishlist->get_page_url();
+}
+
+/**
+ * Category intro text for SEO (theme helper).
+ *
+ * @param WP_Term|int|string $term
+ */
+function atomy_seo_category_intro( $term ): string {
+	return atomy_core()->seo->category_intro_for_term( $term );
 }

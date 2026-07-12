@@ -23,6 +23,7 @@ if ( $banners ) {
 $shop_url = get_permalink( wc_get_page_id( 'shop' ) );
 ?>
 <?php if ( $banners ) : ?>
+<h1 class="visually-hidden">Официальный дистрибьютор Atomy в России — каталог и цены</h1>
 <section class="hero-slider" data-hero-slider>
 	<div class="hero-slider__track">
 		<?php foreach ( $banners as $i => $banner ) : ?>
@@ -34,7 +35,7 @@ $shop_url = get_permalink( wc_get_page_id( 'shop' ) );
 			}
 			?>
 			<a class="hero-slide<?php echo 0 === $i ? ' is-active' : ''; ?>" href="<?php echo $link; ?>" data-slide>
-				<img src="<?php echo $img; ?>" alt="" loading="<?php echo 0 === $i ? 'eager' : 'lazy'; ?>" />
+				<img src="<?php echo $img; ?>" alt="" width="1920" height="440" loading="<?php echo 0 === $i ? 'eager' : 'lazy'; ?>"<?php echo 0 === $i ? ' fetchpriority="high"' : ''; ?> />
 			</a>
 		<?php endforeach; ?>
 		<button type="button" class="hero-slider__btn hero-slider__btn--prev" data-slide-prev aria-label="Назад">&lsaquo;</button>
