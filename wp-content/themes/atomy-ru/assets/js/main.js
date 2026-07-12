@@ -79,25 +79,80 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   initWishlist();
-  initCookieNotice();
 });
 
 function initCookieNotice() {
   var KEY = 'atomy_cookie_consent';
   var notice = document.querySelector('[data-cookie-notice]');
-  if (!notice) { return; }
+  if (!notice || notice.dataset.accepted === '1') {
+    return;
+  }
+
+  if (hasCookieConsent(KEY)) {
+    removeCookieNotice(notice);
+    return;
+  }
+
+  notice.classList.add('is-visible');
+  notice.setAttribute('aria-hidden', 'false');
+
+  notice.addEventListener('click', function (e) {
+    var btn = e.target.closest ? e.target.closest('[data-cookie-accept]') : null;
+    if (!btn || notice.dataset.accepted === '1') {
+      return;
+    }
+    e.preventDefault();
+    e.stopPropagation();
+    acceptCookieConsent(notice, KEY);
+  });
+}
+
+function hasCookieConsent(key) {
+  if (document.cookie.indexOf(key + '=1') !== -1) {
+    return true;
+  }
   try {
-    if (localStorage.getItem(KEY)) { return; }
-  } catch (e) { return; }
-  notice.hidden = false;
+    if (localStorage.getItem(key) === '1') {
+      return true;
+    }
+  } catch (e) {}
+  try {
+    if (sessionStorage.getItem(key) === '1') {
+      return true;
+    }
+  } catch (e) {}
+  return false;
+}
+
+function acceptCookieConsent(notice, key) {
+  notice.dataset.accepted = '1';
   var btn = notice.querySelector('[data-cookie-accept]');
   if (btn) {
-    btn.addEventListener('click', function () {
-      try { localStorage.setItem(KEY, '1'); } catch (e) {}
-      notice.classList.add('is-hiding');
-      setTimeout(function () { notice.hidden = true; }, 250);
-    });
+    btn.disabled = true;
   }
+  var maxAge = 60 * 60 * 24 * 365;
+  document.cookie = key + '=1;path=/;max-age=' + maxAge + ';SameSite=Lax';
+  try { localStorage.setItem(key, '1'); } catch (e) {}
+  try { sessionStorage.setItem(key, '1'); } catch (e) {}
+  notice.classList.add('is-hiding');
+  window.setTimeout(function () {
+    removeCookieNotice(notice);
+  }, 220);
+}
+
+function removeCookieNotice(notice) {
+  if (!notice || !notice.parentNode) {
+    return;
+  }
+  notice.parentNode.removeChild(notice);
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', function () {
+    initCookieNotice();
+  });
+} else {
+  initCookieNotice();
 }
 
 function initWishlist() {

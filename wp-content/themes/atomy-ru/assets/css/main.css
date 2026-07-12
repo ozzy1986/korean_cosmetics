@@ -691,9 +691,9 @@ ul.products li.product .button:hover,
   position: fixed;
   left: 1.25rem;
   bottom: 1.25rem;
-  z-index: 400;
+  z-index: 10000;
   max-width: 380px;
-  display: flex;
+  display: none;
   align-items: center;
   gap: 0.9rem;
   background: #fff;
@@ -701,10 +701,14 @@ ul.products li.product .button:hover,
   border-radius: var(--atomy-radius);
   box-shadow: 0 10px 30px rgba(25, 25, 25, 0.14);
   padding: 0.9rem 1.1rem;
-  animation: cookie-in 0.3s ease;
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: auto;
+  transition: opacity 0.22s ease, transform 0.22s ease;
 }
-.cookie-notice.is-hiding { opacity: 0; transform: translateY(8px); }
+.cookie-notice.is-visible {
+  display: flex;
+  animation: cookie-in 0.3s ease;
+}
+.cookie-notice.is-hiding { opacity: 0; transform: translateY(8px); pointer-events: none; }
 @keyframes cookie-in {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: none; }
@@ -721,8 +725,11 @@ ul.products li.product .button:hover,
   font-size: 0.82rem;
   padding: 0.55rem 1.1rem;
   cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   transition: background 0.15s ease;
 }
+.cookie-notice__btn:disabled { opacity: 0.7; cursor: default; }
 .cookie-notice__btn:hover { background: var(--atomy-primary-dark); }
 @media (max-width: 480px) {
   .cookie-notice {
