@@ -53,7 +53,7 @@ class Atomy_Core_Prices {
 	}
 
 	private const BADGE_LABELS = array(
-		'Halal'         => 'Halal',
+		'Halal'         => 'Халяль',
 		'charity'       => 'Корзина добра',
 		'free-shipping' => 'Бесплатная доставка',
 	);

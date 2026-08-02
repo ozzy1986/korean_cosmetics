@@ -384,7 +384,7 @@ function atomy_ru_head_meta(): void {
 	$favicon = 'https://image.atomy.ru/disp/siteInfo/seo/favicon_v20250526140452.ico';
 	echo '<link rel="icon" href="' . esc_url( $favicon ) . '" sizes="any" />' . "\n";
 
-	$desc      = 'Atomy Russia — премиальная косметика, продукты для здоровья и товары для дома по абсолютной цене. Цены до и после регистрации, баллы PV.';
+	$desc      = 'Atomy Россия — премиальная косметика, продукты для здоровья и товары для дома по абсолютной цене. Цены до и после регистрации, баллы PV.';
 	$og_image  = '';
 	$og_type   = 'website';
 
@@ -395,7 +395,7 @@ function atomy_ru_head_meta(): void {
 		if ( '' !== trim( $excerpt ) ) {
 			$desc = wp_trim_words( $excerpt, 32 );
 		} else {
-			$desc = get_the_title( $post_id ) . ' — купить в Atomy Russia. Цена до и после регистрации, баллы PV.';
+			$desc = get_the_title( $post_id ) . ' — купить в Atomy Россия. Цена до и после регистрации, баллы PV.';
 		}
 		$thumb = get_the_post_thumbnail_url( $post_id, 'large' );
 		if ( $thumb ) {
@@ -418,7 +418,7 @@ function atomy_ru_head_meta(): void {
 	$url   = is_singular() ? get_permalink() : home_url( add_query_arg( null, null ) );
 
 	echo '<meta name="description" content="' . esc_attr( $desc ) . '" />' . "\n";
-	echo '<meta property="og:site_name" content="Atomy Russia" />' . "\n";
+	echo '<meta property="og:site_name" content="Atomy Россия" />' . "\n";
 	echo '<meta property="og:type" content="' . esc_attr( $og_type ) . '" />' . "\n";
 	echo '<meta property="og:locale" content="ru_RU" />' . "\n";
 	echo '<meta property="og:title" content="' . esc_attr( $title ) . '" />' . "\n";
@@ -433,19 +433,6 @@ add_action( 'wp_head', 'atomy_ru_head_meta', 2 );
 
 remove_action( 'wp_head', 'wp_generator' );
 add_filter( 'xmlrpc_enabled', '__return_false' );
-
-function atomy_ru_shop_page_title(): void {
-	$page_id = (int) get_option( 'woocommerce_shop_page_id' );
-	if ( $page_id && 'Shop' === get_post_field( 'post_title', $page_id ) ) {
-		wp_update_post(
-			array(
-				'ID'         => $page_id,
-				'post_title' => 'Каталог',
-			)
-		);
-	}
-}
-add_action( 'init', 'atomy_ru_shop_page_title', 20 );
 
 function atomy_ru_catalog_redirect(): void {
 	if ( is_404() && '/catalog' === untrailingslashit( (string) parse_url( (string) ( $_SERVER['REQUEST_URI'] ?? '' ), PHP_URL_PATH ) ) ) {
@@ -462,3 +449,121 @@ function atomy_ru_disable_wc_block_templates( bool $has_block, string $template_
 	return false;
 }
 add_filter( 'woocommerce_has_block_template', 'atomy_ru_disable_wc_block_templates', 10, 2 );
+
+/**
+ * Force Russian locale on the storefront.
+ */
+function atomy_ru_locale( string $locale ): string {
+	if ( is_admin() && ! wp_doing_ajax() ) {
+		return $locale;
+	}
+	return 'ru_RU';
+}
+add_filter( 'locale', 'atomy_ru_locale' );
+
+/**
+ * Localize site name and WooCommerce page titles stored in the database.
+ */
+function atomy_ru_localize_site_labels(): void {
+	if ( 'Atomy Russia' === get_option( 'blogname' ) ) {
+		update_option( 'blogname', 'Atomy Россия' );
+	}
+	$pages = array(
+		(int) get_option( 'woocommerce_shop_page_id' )       => array( 'Каталог', 'Shop' ),
+		(int) get_option( 'woocommerce_cart_page_id' )       => array( 'Корзина', 'Cart' ),
+		(int) get_option( 'woocommerce_checkout_page_id' )   => array( 'Оформление заказа', 'Checkout' ),
+		(int) get_option( 'woocommerce_myaccount_page_id' )  => array( 'Личный кабинет', 'My account' ),
+	);
+	foreach ( $pages as $page_id => $pair ) {
+		if ( ! $page_id ) {
+			continue;
+		}
+		$current = (string) get_post_field( 'post_title', $page_id );
+		if ( $current === $pair[1] ) {
+			wp_update_post(
+				array(
+					'ID'         => $page_id,
+					'post_title' => $pair[0],
+				)
+			);
+		}
+	}
+}
+add_action( 'init', 'atomy_ru_localize_site_labels', 20 );
+
+/**
+ * WooCommerce catalog sorting labels.
+ */
+function atomy_ru_catalog_orderby( array $options ): array {
+	return array(
+		'menu_order' => 'Сортировка по умолчанию',
+		'popularity' => 'По популярности',
+		'rating'     => 'По оценке',
+		'date'       => 'По новизне',
+		'price'      => 'По цене: сначала дешевле',
+		'price-desc' => 'По цене: сначала дороже',
+	);
+}
+add_filter( 'woocommerce_catalog_orderby', 'atomy_ru_catalog_orderby' );
+add_filter( 'woocommerce_default_catalog_orderby_options', 'atomy_ru_catalog_orderby' );
+
+function atomy_ru_breadcrumb_defaults( array $defaults ): array {
+	$defaults['home'] = 'Главная';
+	return $defaults;
+}
+add_filter( 'woocommerce_breadcrumb_defaults', 'atomy_ru_breadcrumb_defaults' );
+
+function atomy_ru_empty_cart_message(): string {
+	return 'Ваша корзина пуста.';
+}
+add_filter( 'wc_empty_cart_message', 'atomy_ru_empty_cart_message' );
+
+function atomy_ru_return_to_shop_text(): string {
+	return 'Вернуться в каталог';
+}
+add_filter( 'woocommerce_return_to_shop_text', 'atomy_ru_return_to_shop_text' );
+
+/**
+ * Fallback Russian strings for WooCommerce when translations are not loaded.
+ */
+function atomy_ru_wc_gettext( string $translated, string $text, string $domain ): string {
+	if ( 'woocommerce' !== $domain ) {
+		return $translated;
+	}
+	static $strings = array(
+		'Cart'                              => 'Корзина',
+		'Cart totals'                       => 'Итого по корзине',
+		'Total'                             => 'Итого',
+		'Product'                           => 'Товар',
+		'Price'                             => 'Цена',
+		'Quantity'                          => 'Кол-во',
+		'Subtotal'                          => 'Подытог',
+		'Update cart'                       => 'Обновить корзину',
+		'Remove this item'                  => 'Удалить товар',
+		'Remove'                            => 'Удалить',
+		'Your cart is currently empty.'     => 'Ваша корзина пуста.',
+		'Return to shop'                    => 'Вернуться в каталог',
+		'View cart'                         => 'В корзину',
+		'Add to cart'                       => 'В корзину',
+		'Continue shopping'                 => 'Продолжить покупки',
+		'Default sorting'                   => 'Сортировка по умолчанию',
+		'Sort by popularity'                => 'По популярности',
+		'Sort by average rating'            => 'По оценке',
+		'Sort by latest'                    => 'По новизне',
+		'Sort by price: low to high'        => 'По цене: сначала дешевле',
+		'Sort by price: high to low'        => 'По цене: сначала дороже',
+		'Home'                              => 'Главная',
+		'Showing the single result'         => 'Показан 1 товар',
+		'No products were found matching your selection.' => 'Товары не найдены.',
+		'Out of stock'                      => 'Нет в наличии',
+		'In stock'                          => 'В наличии',
+		'Available on backorder'            => 'Доступно под заказ',
+		'Description'                       => 'Описание',
+		'Additional information'            => 'Дополнительная информация',
+		'Reviews'                           => 'Отзывы',
+		'Related products'                  => 'Похожие товары',
+		'Showing %1$d&ndash;%2$d of %3$d results' => 'Показано %1$d–%2$d из %3$d',
+	);
+	return $strings[ $text ] ?? $translated;
+}
+add_filter( 'gettext', 'atomy_ru_wc_gettext', 20, 3 );

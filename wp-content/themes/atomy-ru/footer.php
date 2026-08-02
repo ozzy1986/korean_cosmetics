@@ -15,7 +15,7 @@
 		</div>
 		<div class="site-footer__col">
 			<h4>Поддержка</h4>
-			<p>E-mail: atomy_ru@atomypark.com</p>
+			<p>Почта: atomy_ru@atomypark.com</p>
 			<p>Пн-Пт: 08:00-18:00</p>
 			<p>Сб: 09:00-18:00</p>
 		</div>

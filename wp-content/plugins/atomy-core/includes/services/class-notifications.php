@@ -61,7 +61,7 @@ class Atomy_Core_Notifications {
 			'Фамилия: ' . ( $customer['last_name'] ?? ( $customer['name'] ?? '—' ) ),
 			'Имя: ' . ( $customer['first_name'] ?? '—' ),
 			'Отчество: ' . ( $customer['middle_name'] ?? '—' ),
-			'Email: ' . $customer['email'],
+			'Эл. почта: ' . $customer['email'],
 			'Телефон: ' . $customer['phone'],
 			'Дата рождения: ' . ( $customer['birthdate'] ?? '—' ),
 			'Город: ' . $customer['city'],
