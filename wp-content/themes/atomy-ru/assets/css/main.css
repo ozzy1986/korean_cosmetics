@@ -819,6 +819,7 @@ ul.products li.product .button:hover,
   line-height: 1.6;
 }
 .legal-page th { background: var(--atomy-soft); font-weight: 700; white-space: nowrap; }
+.legal-page td ul { margin: 0; padding-left: 1.2rem; }
 @media (max-width: 680px) {
   .legal-page th { white-space: normal; }
 }

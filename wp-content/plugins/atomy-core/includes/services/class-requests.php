@@ -93,6 +93,20 @@ class Atomy_Core_Requests {
 							<input type="text" id="atomy_city" name="city" required maxlength="120" />
 							<span class="atomy-field__error" aria-live="polite">Укажите город доставки</span>
 						</div>
+						<div class="atomy-field atomy-field--checkbox">
+							<label class="atomy-checkbox" for="atomy_no_account">
+								<input type="checkbox" id="atomy_no_account" name="no_account_confirm" value="1" required />
+								<span>Я подтверждаю, что у меня нет зарегистрированного аккаунта в интернет-магазине Атоми.</span>
+							</label>
+							<span class="atomy-field__error" aria-live="polite">Необходимо подтвердить</span>
+						</div>
+						<div class="atomy-field atomy-field--checkbox">
+							<label class="atomy-checkbox" for="atomy_privacy_consent">
+								<input type="checkbox" id="atomy_privacy_consent" name="privacy_consent" value="1" required />
+								<span>Я даю согласие на обработку персональных данных в соответствии с <a href="<?php echo esc_url( home_url( '/privacy/' ) ); ?>" target="_blank" rel="noopener">политикой конфиденциальности</a></span>
+							</label>
+							<span class="atomy-field__error" aria-live="polite">Необходимо дать согласие</span>
+						</div>
 						<button type="submit" class="atomy-btn atomy-btn--primary">Отправить заявку</button>
 						<div class="atomy-request-message" aria-live="polite"></div>
 					</form>
@@ -245,6 +259,8 @@ class Atomy_Core_Requests {
 			'' === $last_name || '' === $first_name || '' === $middle_name
 			|| '' === $email || '' === $phone || '' === $birthdate || '' === $city
 			|| ! is_email( $email )
+			|| empty( $_POST['no_account_confirm'] )
+			|| empty( $_POST['privacy_consent'] )
 		) {
 			wp_send_json_error( array( 'message' => 'Заполните все обязательные поля корректно.' ), 400 );
 		}

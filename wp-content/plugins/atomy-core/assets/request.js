@@ -484,6 +484,10 @@
     $(this).closest('.atomy-field').removeClass('has-error');
   });
 
+  $form.on('change', '.atomy-field--checkbox input[type="checkbox"]', function () {
+    $(this).closest('.atomy-field').removeClass('has-error');
+  });
+
   function validateForm() {
     var checks = [
       [$('#atomy_last_name'), $('#atomy_last_name').val().trim() !== ''],
@@ -492,7 +496,9 @@
       [$('#atomy_email'), EMAIL_RE.test($('#atomy_email').val().trim())],
       [$('#atomy_phone'), $('#atomy_phone').val().trim() !== ''],
       [$birth, isValidBirthdate($birth.val())],
-      [$('#atomy_city'), $('#atomy_city').val().trim() !== '']
+      [$('#atomy_city'), $('#atomy_city').val().trim() !== ''],
+      [$('#atomy_no_account'), $('#atomy_no_account').is(':checked')],
+      [$('#atomy_privacy_consent'), $('#atomy_privacy_consent').is(':checked')]
     ];
     var $firstInvalid = null;
     checks.forEach(function (check) {
