@@ -486,7 +486,9 @@
 
   function validateForm() {
     var checks = [
-      [$('#atomy_name'), $('#atomy_name').val().trim() !== ''],
+      [$('#atomy_last_name'), $('#atomy_last_name').val().trim() !== ''],
+      [$('#atomy_first_name'), $('#atomy_first_name').val().trim() !== ''],
+      [$('#atomy_middle_name'), $('#atomy_middle_name').val().trim() !== ''],
       [$('#atomy_email'), EMAIL_RE.test($('#atomy_email').val().trim())],
       [$('#atomy_phone'), $('#atomy_phone').val().trim() !== ''],
       [$birth, isValidBirthdate($birth.val())],
@@ -520,7 +522,9 @@
     $.post(cfg.ajaxUrl, {
       action: 'atomy_submit_request',
       nonce: cfg.nonce,
-      name: $('#atomy_name').val(),
+      last_name: $('#atomy_last_name').val(),
+      first_name: $('#atomy_first_name').val(),
+      middle_name: $('#atomy_middle_name').val(),
       email: $('#atomy_email').val(),
       phone: $('#atomy_phone').val(),
       birthdate: $birth.val(),

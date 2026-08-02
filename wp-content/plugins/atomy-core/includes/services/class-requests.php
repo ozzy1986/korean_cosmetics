@@ -54,9 +54,19 @@ class Atomy_Core_Requests {
 					<form id="atomy-request-form" class="atomy-request-form" novalidate>
 						<input type="hidden" name="atomy_hp" value="" autocomplete="off" tabindex="-1" />
 						<div class="atomy-field">
-							<label for="atomy_name">Имя *</label>
-							<input type="text" id="atomy_name" name="name" required maxlength="120" />
+							<label for="atomy_last_name">Фамилия *</label>
+							<input type="text" id="atomy_last_name" name="last_name" required maxlength="120" />
+							<span class="atomy-field__error" aria-live="polite">Укажите фамилию</span>
+						</div>
+						<div class="atomy-field">
+							<label for="atomy_first_name">Имя *</label>
+							<input type="text" id="atomy_first_name" name="first_name" required maxlength="120" />
 							<span class="atomy-field__error" aria-live="polite">Укажите имя</span>
+						</div>
+						<div class="atomy-field">
+							<label for="atomy_middle_name">Отчество *</label>
+							<input type="text" id="atomy_middle_name" name="middle_name" required maxlength="120" />
+							<span class="atomy-field__error" aria-live="polite">Укажите отчество</span>
 						</div>
 						<div class="atomy-field">
 							<label for="atomy_email">Email *</label>
@@ -222,13 +232,20 @@ class Atomy_Core_Requests {
 			wp_send_json_error( array( 'message' => 'Корзина пуста.' ), 400 );
 		}
 
-		$name      = sanitize_text_field( wp_unslash( $_POST['name'] ?? '' ) );
-		$email     = sanitize_email( wp_unslash( $_POST['email'] ?? '' ) );
-		$phone     = sanitize_text_field( wp_unslash( $_POST['phone'] ?? '' ) );
-		$birthdate = sanitize_text_field( wp_unslash( $_POST['birthdate'] ?? '' ) );
-		$city      = sanitize_text_field( wp_unslash( $_POST['city'] ?? '' ) );
+		$last_name   = sanitize_text_field( wp_unslash( $_POST['last_name'] ?? '' ) );
+		$first_name  = sanitize_text_field( wp_unslash( $_POST['first_name'] ?? '' ) );
+		$middle_name = sanitize_text_field( wp_unslash( $_POST['middle_name'] ?? '' ) );
+		$email       = sanitize_email( wp_unslash( $_POST['email'] ?? '' ) );
+		$phone       = sanitize_text_field( wp_unslash( $_POST['phone'] ?? '' ) );
+		$birthdate   = sanitize_text_field( wp_unslash( $_POST['birthdate'] ?? '' ) );
+		$city        = sanitize_text_field( wp_unslash( $_POST['city'] ?? '' ) );
+		$name        = trim( $last_name . ' ' . $first_name . ' ' . $middle_name );
 
-		if ( '' === $name || '' === $email || '' === $phone || '' === $birthdate || '' === $city || ! is_email( $email ) ) {
+		if (
+			'' === $last_name || '' === $first_name || '' === $middle_name
+			|| '' === $email || '' === $phone || '' === $birthdate || '' === $city
+			|| ! is_email( $email )
+		) {
 			wp_send_json_error( array( 'message' => 'Заполните все обязательные поля корректно.' ), 400 );
 		}
 
@@ -250,13 +267,13 @@ class Atomy_Core_Requests {
 			wp_send_json_error( array( 'message' => 'Ошибка сохранения заявки.' ), 500 );
 		}
 
-		update_post_meta( $post_id, '_atomy_customer', compact( 'name', 'email', 'phone', 'birthdate', 'city' ) );
+		update_post_meta( $post_id, '_atomy_customer', compact( 'last_name', 'first_name', 'middle_name', 'name', 'email', 'phone', 'birthdate', 'city' ) );
 		update_post_meta( $post_id, '_atomy_cart', $cart_snapshot );
 		update_post_meta( $post_id, '_atomy_ip', $ip );
 
 		$payload = array(
 			'id'       => $post_id,
-			'customer' => compact( 'name', 'email', 'phone', 'birthdate', 'city' ),
+			'customer' => compact( 'last_name', 'first_name', 'middle_name', 'name', 'email', 'phone', 'birthdate', 'city' ),
 			'cart'     => $cart_snapshot,
 		);
 

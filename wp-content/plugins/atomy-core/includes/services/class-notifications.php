@@ -58,7 +58,9 @@ class Atomy_Core_Notifications {
 		$customer = $payload['customer'];
 		$lines    = array(
 			'Новая заявка #' . $payload['id'],
-			'Имя: ' . $customer['name'],
+			'Фамилия: ' . ( $customer['last_name'] ?? ( $customer['name'] ?? '—' ) ),
+			'Имя: ' . ( $customer['first_name'] ?? '—' ),
+			'Отчество: ' . ( $customer['middle_name'] ?? '—' ),
 			'Email: ' . $customer['email'],
 			'Телефон: ' . $customer['phone'],
 			'Дата рождения: ' . ( $customer['birthdate'] ?? '—' ),
